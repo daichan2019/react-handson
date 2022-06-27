@@ -1,17 +1,37 @@
-import { useState } from 'react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Checkbox,
+} from '@chakra-ui/react';
 
-export const TodoList = () => {
-  const [todos, setTodos] = useState([
-    { text: 'task1', isCompleted: false },
-    { text: 'task2', isCompleted: false },
-    { text: 'task3', isCompleted: false },
-    { text: 'task4', isCompleted: false },
-  ]);
+export const TodoList = ({ todos }) => {
   return (
-    <ul>
-      {todos.map((t) => (
-        <li>{t.text}</li>
-      ))}
-    </ul>
+    <TableContainer>
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Title</Th>
+            <Th>is Completed</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {todos.map((todo) => {
+            return (
+              <Tr>
+                <Td>{todo.title}</Td>
+                <Td>
+                  <Checkbox isChecked={todo.isCompleted}></Checkbox>
+                </Td>
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
+    </TableContainer>
   );
 };

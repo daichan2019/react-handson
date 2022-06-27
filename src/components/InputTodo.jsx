@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import { Input } from '@chakra-ui/react';
+import { Flex, Button } from '@chakra-ui/react';
 
-export const InputTodo = () => {
-  const [text, setText] = useState('');
-
-  const handleChange = (e) => {
-    setText(e.target.value);
-  };
-
-  const handleSubmit = () => {
-    setText('');
-  };
+export const InputTodo = (props) => {
+  const { text, handleChange, handleSubmit } = props;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={text} onChange={handleChange} />
-      <button>Add Todo</button>
-    </form>
+    <Flex gap="2">
+      <Input
+        variant="outline"
+        value={text}
+        onChange={handleChange}
+        placeholder="todoを入力してください。"
+      />
+      <Button onClick={handleSubmit} colorScheme="teal" size="md">
+        Add
+      </Button>
+    </Flex>
   );
 };
