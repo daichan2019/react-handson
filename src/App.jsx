@@ -1,45 +1,61 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import './App.css';
+import { useState } from 'react';
+import { ChakraProvider, Container } from '@chakra-ui/react';
+import { InputTodo } from './components/InputTodo';
+import { TodoFilter } from './components/TodoFilter';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([]);
+  const [text, setText] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  const handleChange = (e) => {
+    setText(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    if (text === '') return;
+
+    setTodos((todos) => [...todos, { title: text, isCompleted: false }]);
+    setText('');
+  };
+
+  const handleFilterChange = (value) => setFilter(value);
+
+  const displayTodos = todos.filter((todo) => {
+    if (filter === 'all') return true;
+    if (filter === 'todo') return !todo.isCompleted;
+    if (filter === 'complete') return todo.isCompleted;
+  });
+
+  const handleCheck = (checked) => {
+    const newTodos = todos.map((todo) => {
+      if (todo.index === checked.key) {
+        todo.isCompleted = !todo.isCompleted;
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+  };
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <ChakraProvider>
+        <Container maxW="2xl" centerContent>
+          <InputTodo
+            text={text}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+          />
+          <TodoFilter
+            displayTodos={displayTodos}
+            handleFilterChange={handleFilterChange}
+            handleCheck={handleCheck}
+          />
+        </Container>
+      </ChakraProvider>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
